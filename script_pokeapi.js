@@ -1,4 +1,4 @@
-////////////////////////// FUNCIONES DE CARGA DE  PAISES JSON PARA CONTACTO //////////////////////////
+////////////////////////// FUNCIONES DE CARGA DE  LISTA POKEMON JSON //////////////////////////
 
 function traer() {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0")
@@ -8,7 +8,6 @@ function traer() {
             tabla(datos)
         })
 }
-traer();
 
 function tabla(datos) {
     //var mainMenu = "<table class='table table-striped'>";
@@ -25,12 +24,10 @@ function tabla(datos) {
     for(let valor of datos.results){
         mainMenu += "<tr>"
         mainMenu += "<td>" + valor.name + "</td>";
-        //mainMenu += "<td>" + valor.url + "</td>";
         /*********************** */
         mainMenu += "<td>";
         mainMenu += "<form action='/detail.html' method='GET'>";
-        //mainMenu += "<form action='/detail.html'";
-        mainMenu += "<input type='hidden' value ="+ valor.name +">";
+        mainMenu += "<input type='hidden' name='name' value ="+ valor.name +">";
         mainMenu += "<input type='submit' value='VER'>";
         mainMenu += "</form>"; 
         mainMenu += "</td>";
@@ -39,18 +36,34 @@ function tabla(datos) {
     }
     document.getElementById("mainMenu").innerHTML = mainMenu;
 }
+////////////////////////// FUNCIONES DE CARGA DE  LISTA POKEMON JSON //////////////////////////
 
-
-function mostrarPokemon(url_pokemon){
-/*
-<td>
-                            <form action='/detail/' method="GET">
-                                <!-- <td>{{ pkmon.url }}</td> -->
-                                <input type="hidden" name="POKEMON" value = {{ pkmon.name }}>
-                                <input type="submit" value="VER">
-                            </form>
-                        </td>
-*/
+//obtiene el "name" de la url
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
 }
 
-////////////////////////// FUNCIONES DE CARGA DE  PAISES JSON PARA CONTACTO //////////////////////////
+// muestra los detalles del poke
+function mostrarPokemon() {
+    const pokemonName = getQueryParam('name');
+    console.log(pokemonName)
+    if (pokemonName) {
+       fetch("https://pokeapi.co/api/v2/pokemon/"+pokemonName)
+       //fetch(pokemonName)
+            .then(response => response.json())
+            .then(data => {
+                const detailsDiv = document.getElementById('mainDetail');
+                detailsDiv.innerHTML = `
+                    <h2>${data.name}</h2>
+                    <img src="${data.sprites.front_default}" alt="${data.name}">
+                    <p>Height: ${data.height}</p>
+                    <p>Weight: ${data.weight}</p>
+                    <p>Base Experience: ${data.base_experience}</p>
+                    <p>Abilities: ${data.abilities.map(a => a.ability.name).join(', ')}</p>
+                `;
+            });
+    } else {
+        document.getElementById('mainDetail').textContent = 'No Pokémon selected.';
+    }
+}
