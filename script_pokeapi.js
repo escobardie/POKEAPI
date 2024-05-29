@@ -16,7 +16,7 @@ function tabla(datos) {
     mainMenu += "<thead>";
     mainMenu += "<tr>";
     mainMenu += "<th>NOMBRE</th>";
-    mainMenu += "<th>URL</th>";
+    mainMenu += "<th>INFORMACION</th>";
     mainMenu += "</tr>";
     mainMenu += "</thead>";
     mainMenu += "<tbody>";
