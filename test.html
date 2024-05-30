@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>The Window Object</h1>
+<h2>The localStorage Property</h2>
+
+
+<p><button onclick="SaveDataToLocalStorage()" type="button">ADD ELEMENT!</button></p>
+<p>LISTA DE ELEMENTOS</p>
+<p id="demo"></p>
+
+<script>
+
+function SaveDataToLocalStorage(){
+    var a = [];
+    
+    // Parse the serialized data back into an aray of objects
+    a = JSON.parse(localStorage.getItem('session2')) || [];
+    // Push the new data (whether it be an object or anything else) onto the array
+   	a.push("HOLA");
+    console.log(a)
+    // Re-serialize the array back into a string and store it in localStorage
+    localStorage.setItem("session2", JSON.stringify(a));
+    console.log(a)
+    
+    document.getElementById("demo").innerHTML = localStorage.getItem("session2");
+}
+
+</script>
+
+</body>
+</html>
