@@ -1,3 +1,6 @@
+var a = [];
+var name_session = "session11";
+
 ////////////////////////// FUNCIONES DE CARGA DE  LISTA POKEMON JSON //////////////////////////
 
 function traer() {
@@ -17,6 +20,7 @@ function tabla(datos) {
     mainMenu += "<tr>";
     mainMenu += "<th>NOMBRE</th>";
     mainMenu += "<th>INFORMACION</th>";
+    mainMenu += "<th>FAVORITO</th>";
     mainMenu += "</tr>";
     mainMenu += "</thead>";
     mainMenu += "<tbody>";
@@ -29,15 +33,20 @@ function tabla(datos) {
         mainMenu += "<form action='/detail.html' method='GET'>";
         mainMenu += "<input type='hidden' name='name' value ="+ valor.name +">";
         mainMenu += "<input type='submit' value='VER'>";
-        mainMenu += "</form>"; 
+        mainMenu += "</form>";
         mainMenu += "</td>";
         /*********************** */
+        mainMenu += "<td>";
+        //mainMenu += "FAV";
+        mainMenu += "<button name="+ valor.name +" onclick='changeText(this)'>Fav</button>";
+        mainMenu += "</td>";
         mainMenu += "</tr>";
     }
     document.getElementById("mainMenu").innerHTML = mainMenu;
 }
-////////////////////////// FUNCIONES DE CARGA DE  LISTA POKEMON JSON //////////////////////////
+////////////////////////// FIN //////////////////////////
 
+////////////////////////// FUNCIONES DE DATOS POKEMON JSON //////////////////////////
 //obtiene el "name" de la url
 function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -67,3 +76,59 @@ function mostrarPokemon() {
         document.getElementById('mainDetail').textContent = 'No Pokémon selected.';
     }
 }
+////////////////////////// FIN //////////////////////////
+
+
+
+
+
+function changeText(id) {
+    console.log(id.name)
+    // gracias al id obtenemos el nombre del pokemon
+    var add_pokemon = id.name
+
+    // if (!a.includes(id.name)) { // si no lo contiene, lo guardara // ORIGINAL
+    if (!localStorage.getItem(name_session).includes(id.name)) { // si no lo contiene, lo guardara
+        console.log("NO contiene")
+        id.style.color = "red";
+        // lo guardamos en la lista
+        SaveDataToLocalStorage(add_pokemon)
+    }else{ // si contiene no lo guarda, lo elimina
+        console.log("si contiene")
+        id.style.color = "blue"; 
+        DeleteDataToLocalStorage(add_pokemon);
+    }
+    
+    // https://www.w3schools.com/js/tryit.asp?filename=tryjs_event_onclick3
+}
+
+function SaveDataToLocalStorage(add_pokemon){
+
+    //var name_session = "session10"; //original
+    //var a = []; //original
+    
+    // Parse the serialized data back into an aray of objects
+    a = JSON.parse(localStorage.getItem(name_session)) || [];
+    // Push the new data (whether it be an object or anything else) onto the array
+   	a.push(add_pokemon);
+    // console.log(a)
+    // Re-serialize the array back into a string and store it in localStorage
+    localStorage.setItem(name_session, JSON.stringify(a));
+    console.log(a)
+    
+    //document.getElementById("demo").innerHTML = localStorage.getItem(name_session);
+}
+
+function DeleteDataToLocalStorage(add_pokemon){
+    // Parse the serialized data back into an aray of objects
+    a = JSON.parse(localStorage.getItem(name_session)) || [];
+    // Push the new data (whether it be an object or anything else) onto the array
+   	//delete a[add_pokemon];
+    //console.log(a)
+    // console.log(a)
+    // Re-serialize the array back into a string and store it in localStorage
+    localStorage.setItem(name_session, JSON.stringify(a));
+    console.log(a)
+}
+
+//https://www.w3schools.com/jsref/event_onsubmit.asp
